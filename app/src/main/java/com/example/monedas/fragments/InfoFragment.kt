@@ -1,4 +1,4 @@
-package com.example.monedas
+package com.example.monedas.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.monedas.R
 import com.example.monedas.models.Moneda
 import kotlinx.android.synthetic.main.fragment_info.view.*
 

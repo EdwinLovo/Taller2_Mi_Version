@@ -5,7 +5,12 @@ import android.os.Parcelable
 
 class Moneda() : Parcelable {
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        dest?.writeString(ambito)
+        dest?.writeString(año)
+        dest?.writeString(disponibilidad)
+        dest?.writeString(id)
+        dest?.writeString(logo)
+        dest?.writeString(nombre)
     }
 
     override fun describeContents(): Int {

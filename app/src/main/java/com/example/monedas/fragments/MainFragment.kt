@@ -1,16 +1,19 @@
-package com.example.monedas
+package com.example.monedas.fragments
 
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.monedas.R
 import com.example.monedas.adapters.ListaMonedasAdapter
 import com.example.monedas.api.apiService
+import com.example.monedas.database.DatabaseHandler
 import com.example.monedas.models.Moneda
 import com.example.monedas.models.RespuestaMoneda
 import kotlinx.android.synthetic.main.fragment_main.view.*
@@ -33,6 +36,8 @@ class MainFragment : Fragment(), InfoFragment.OnFragmentInteractionListener {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
+    private var dbHandler:DatabaseHandler? = null
+
     private lateinit var retrofit: Retrofit
     private lateinit var recyclerView: RecyclerView
     private lateinit var listaMonedasAdapter: ListaMonedasAdapter
@@ -44,12 +49,14 @@ class MainFragment : Fragment(), InfoFragment.OnFragmentInteractionListener {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_main, container, false)
 
+        dbHandler = DatabaseHandler(view.context)
         initRecyclerView(view)
         obtenerDatos()
 
@@ -98,7 +105,7 @@ class MainFragment : Fragment(), InfoFragment.OnFragmentInteractionListener {
                     val infoFragment = InfoFragment.newInstance(moneda)
 
                     if (resources.configuration.orientation == 1){
-                        fragmentManager!!.beginTransaction().replace(R.id.MainFrameLayout, infoFragment).addToBackStack(null).commit()
+                        fragmentManager!!.beginTransaction().replace(R.id.MainFrameLayout, infoFragment).addToBackStack("ïnfo").commit()
                     } else if (resources.configuration.orientation == 2){
                         fragmentManager!!.beginTransaction().replace(R.id.SecondFrameLayout, infoFragment).commit()
                     }
@@ -132,7 +139,11 @@ class MainFragment : Fragment(), InfoFragment.OnFragmentInteractionListener {
             override fun onResponse(call: Call<RespuestaMoneda>, response: Response<RespuestaMoneda>) {
                 if(response.isSuccessful){
                     var monedaRespuesta = response.body()
-                    var listaMoneda:ArrayList<Moneda> = monedaRespuesta?.moneda!!
+                    //var listaMoneda:ArrayList<Moneda> = monedaRespuesta?.moneda!!
+                    monedaRespuesta?.moneda!!.forEach {
+                        dbHandler?.addCoin(it)
+                    }
+                    var listaMoneda = dbHandler!!.getCoins()
                     listaMonedasAdapter.adicionarMonedas(listaMoneda)
                 }
             }

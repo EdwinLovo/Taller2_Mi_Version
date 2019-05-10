@@ -3,10 +3,12 @@ package com.example.monedas
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.monedas.fragments.InfoFragment
+import com.example.monedas.fragments.MainFragment
 
 class MainActivity : AppCompatActivity(), MainFragment.OnFragmentInteractionListener, InfoFragment.OnFragmentInteractionListener {
 
-    private lateinit var mainFragment:MainFragment
+    private lateinit var mainFragment: MainFragment
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
